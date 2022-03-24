@@ -1,3 +1,5 @@
+package EightGame;
+
 import java.util.*;
 
 public class AStar {
@@ -25,46 +27,32 @@ public class AStar {
 
             if (Board.isEquals(end, cur.getBoard())) return cur;
 
-            ArrayList<Node> ListNext = new ArrayList<>();
             if (cur.getBoard().CanMoveUp()) {
                 Node next = new Node(cur.getBoard().moveUp(), cur,cur.getDepth()+1);
                 if (!contains(visited, next)) {
                     next.setFcost(cost(init, next, end));
-                    ListNext.add(next);
+                    minHeap.add(next);
                 }
             }
             if (cur.getBoard().CanMoveRight()) {
                 Node next = new Node(cur.getBoard().moveRight(), cur,cur.getDepth()+1);
                 if (!contains(visited, next)) {
                     next.setFcost(cost(init, next, end));
-                    ListNext.add(next);
+                    minHeap.add(next);
                 }
             }
             if (cur.getBoard().CanMoveDown()) {
                 Node next = new Node(cur.getBoard().moveDown(), cur,cur.getDepth()+1);
                 if (!contains(visited, next)) {
                     next.setFcost(cost(init, next, end));
-                    ListNext.add(next);
+                    minHeap.add(next);
                 }
             }
             if (cur.getBoard().CanMoveLeft()) {
                 Node next = new Node(cur.getBoard().moveLeft(), cur,cur.getDepth()+1);
                 if (!contains(visited, next)) {
                     next.setFcost(cost(init, next, end));
-                    ListNext.add(next);
-                }
-            }
-
-            if (ListNext.isEmpty()) continue;
-
-            Collections.sort(ListNext);
-            if (!contains(minHeap, ListNext.get(0))) minHeap.add(ListNext.get(0));
-
-            int min = -1;
-            for (Node node : ListNext) {
-                if (!contains(minHeap, node) && (min == -1 || node.getFcost() == min)) {
-                    min = node.getFcost();
-                    minHeap.add(node);
+                    minHeap.add(next);
                 }
             }
         }
@@ -83,12 +71,14 @@ public class AStar {
 
     private static int SummationDifferent(Board init, Board end) {
         int len = init.getLen();
+
         int sum = 0;
         for (int i = 0; i < len; i++) {
             for (int j = 0; j < len; j++) {
                 if (init.getMatrix()[i][j] != end.getMatrix()[i][j]) sum++;
             }
         }
+
         return sum;
     }
 
@@ -109,12 +99,11 @@ public class AStar {
 
     private static int cost(Node init, Node cur, Board end) {
         if (cur.getParent() == null) return cost(init.getBoard(), end);
-        if (heuristic == 1) return Math.max(cost(init, cur.getParent(), end), SummationDifferent(init.getBoard(), cur.getBoard()) + SummationDifferent(cur.getBoard(), end));
-        else return Math.max(cost(init, cur.getParent(), end), ManhattanDistance(init.getBoard(), cur.getBoard()) + ManhattanDistance(cur.getBoard(), end));
+        if (heuristic == 1) return Math.max(cost(init, cur.getParent(), end), cur.getDepth() + SummationDifferent(cur.getBoard(), end));
+        else return Math.max(cost(init, cur.getParent(), end), cur.getDepth() + ManhattanDistance(cur.getBoard(), end));
     }
 
     private static int cost(Board init, Board end) {
-        if (init == null) return 0;
         if (heuristic == 1) return SummationDifferent(init, end);
         else return ManhattanDistance(init, end);
     }
