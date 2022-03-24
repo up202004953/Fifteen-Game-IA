@@ -1,7 +1,9 @@
+package EightGame;
+
 import java.util.*;
 
 public class DFS {
-    private static final int MAX = 16;
+    private static final int MAX = 20;
 
     public static void search(Board init, Board end) {
         System.out.println("DFS");
@@ -9,73 +11,17 @@ public class DFS {
         else System.out.println("That's impossible");
     }
 
-    /*
-    private static Node SearchDFS(Node init, Board end) {
-        Stack<Node> stack = new Stack<>();
-        ArrayList<Node> visited = new ArrayList<>();
+    private static void DepthLimitedSearch(Stack<Node> stack, Node cur, Board end, List<Node> visited) {
+        if (Board.isEquals(end, cur.getBoard())) return;
 
-        stack.add(init);
-        visited.add(init);
-
-        while (!stack.isEmpty()) {
-            Node cur = stack.pop();
-
-            if (Board.isEquals(end, cur.getBoard())) return cur;
-
-            if (cur.getDepth() == MAX) continue;
-
-            visited.add(cur);
-
-            if (cur.getBoard().CanMoveLeft()) {
-                Node next = new Node(cur.getBoard().moveLeft(), cur, cur.getDepth() + 1);
-                if (!contains(visited, next)) stack.add(next);
-            }
-            if (cur.getBoard().CanMoveDown()) {
-                Node next = new Node(cur.getBoard().moveDown(), cur, cur.getDepth() + 1);
-                if (!contains(visited, next)) stack.add(next);
-            }
-            if (cur.getBoard().CanMoveRight()) {
-                Node next = new Node(cur.getBoard().moveRight(), cur, cur.getDepth() + 1);
-                if (!contains(visited, next)) stack.add(next);
-            }
-            if (cur.getBoard().CanMoveUp()) {
-                Node next = new Node(cur.getBoard().moveUp(), cur, cur.getDepth() + 1);
-                if (!contains(visited, next)) stack.add(next);
-            }
-        }
-
-        return null;
-    }
-
-    private static void GeneralSearchAlgorithm(Board init, Board end) {
-        Node last = SearchDFS(new Node(init, 0), end);
-
-        if (last == null)  {
-            System.out.println("Not found");
-            return;
-        }
-
-        int depth = last.getDepth();
-
-        while (last != null) {
-            System.out.println(last);
-            last = last.getParent();
-        }
-
-        System.out.println("Number of iterations: "+depth);
-    }
-
-    */
-
-    private static void DepthLimitedSearch(Stack<Node> stack, Node cur, int depth, List<Node> visited) {
-        if (cur.getDepth() == depth) return;
+        if (cur.getDepth() == MAX) return;
 
         Node next;
         if (cur.getBoard().CanMoveUp()) {
             next = new Node(cur.getBoard().moveUp(), cur,cur.getDepth()+1);
             if (!contains(visited, next)) {
                 stack.add(next); visited.add(next);
-                DepthLimitedSearch(stack, next, depth, visited);
+                DepthLimitedSearch(stack, next, end, visited);
                 visited.remove(next);
             }
         }
@@ -83,7 +29,7 @@ public class DFS {
             next = new Node(cur.getBoard().moveRight(), cur,cur.getDepth()+1);
             if (!contains(visited, next)) {
                 stack.add(next); visited.add(next);
-                DepthLimitedSearch(stack, next, depth, visited);
+                DepthLimitedSearch(stack, next, end, visited);
                 visited.remove(next);
             }
         }
@@ -91,7 +37,7 @@ public class DFS {
             next = new Node(cur.getBoard().moveDown(), cur,cur.getDepth()+1);
             if (!contains(visited, next)) {
                 stack.add(next); visited.add(next);
-                DepthLimitedSearch(stack, next, depth, visited);
+                DepthLimitedSearch(stack, next, end, visited);
                 visited.remove(next);
             }
         }
@@ -99,7 +45,7 @@ public class DFS {
             next = new Node(cur.getBoard().moveLeft(), cur, cur.getDepth()+1);
             if (!contains(visited, next)) {
                 stack.add(next); visited.add(next);
-                DepthLimitedSearch(stack, next, depth, visited);
+                DepthLimitedSearch(stack, next, end, visited);
                 visited.remove(next);
             }
         }
@@ -113,7 +59,7 @@ public class DFS {
 
         stack.add(first);
         visited.add(first);
-        DepthLimitedSearch(stack, first, MAX, visited);
+        DepthLimitedSearch(stack, first, end, visited);
 
         while (!stack.isEmpty()) {
             Node node = stack.pop();
