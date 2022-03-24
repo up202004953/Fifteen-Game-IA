@@ -1,5 +1,3 @@
-package EightGame;
-
 import java.util.List;
 
 public class Node implements Comparable<Node> {
