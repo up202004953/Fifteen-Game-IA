@@ -8,14 +8,15 @@ public class BFS {
     }
 
     private static Node BreadthFirstSearch(Node init, Board end) {
-        Queue<Node> queue = new LinkedList<>();
+        Deque<Node> queue = new LinkedList<>();
         ArrayList<Node> visited = new ArrayList<>();
 
         queue.add(init);
         visited.add(init);
 
         while (true) {
-            Node cur = queue.remove();
+            Node cur = queue.removeFirst();
+
             if (Board.isEquals(end, cur.getBoard())) return cur;
 
             if (cur.getBoard().CanMoveUp()) {
