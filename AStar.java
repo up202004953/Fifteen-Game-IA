@@ -1,3 +1,5 @@
+package EightGame;
+
 import java.util.*;
 
 public class AStar {
@@ -13,7 +15,7 @@ public class AStar {
         else System.out.println("That's impossible");
     }
 
-    public static Node GreedyAlgorithm(Node init, Board end) {
+    public static Node AStarAlgorithm(Node init, Board end) {
         ArrayList<Node> visited = new ArrayList<>();
         PriorityQueue<Node> minHeap = new PriorityQueue<>();
 
@@ -28,28 +30,28 @@ public class AStar {
             if (cur.getBoard().CanMoveUp()) {
                 Node next = new Node(cur.getBoard().moveUp(), cur,cur.getDepth()+1);
                 if (!contains(visited, next)) {
-                    next.setFcost(cost(init, next, end));
+                    next.setCost(cost(next, end));
                     minHeap.add(next);
                 }
             }
             if (cur.getBoard().CanMoveRight()) {
                 Node next = new Node(cur.getBoard().moveRight(), cur,cur.getDepth()+1);
                 if (!contains(visited, next)) {
-                    next.setFcost(cost(init, next, end));
+                    next.setCost(cost(next, end));
                     minHeap.add(next);
                 }
             }
             if (cur.getBoard().CanMoveDown()) {
                 Node next = new Node(cur.getBoard().moveDown(), cur,cur.getDepth()+1);
                 if (!contains(visited, next)) {
-                    next.setFcost(cost(init, next, end));
+                    next.setCost(cost(next, end));
                     minHeap.add(next);
                 }
             }
             if (cur.getBoard().CanMoveLeft()) {
                 Node next = new Node(cur.getBoard().moveLeft(), cur,cur.getDepth()+1);
                 if (!contains(visited, next)) {
-                    next.setFcost(cost(init, next, end));
+                    next.setCost(cost(next, end));
                     minHeap.add(next);
                 }
             }
@@ -57,7 +59,10 @@ public class AStar {
     }
 
     private static void GeneralSearchAlgorithm(Board init, Board end) {
-        Node node = GreedyAlgorithm(new Node(init, 0, cost(init, end)), end);
+        Node first = new Node(init, 0);
+        first.setCost(cost(first, end));
+
+        Node node = AStarAlgorithm(first, end);
 
         int depth = node.getDepth();
         while (node != null) {
@@ -65,6 +70,12 @@ public class AStar {
             node = node.getParent();
         }
         System.out.println("Number of iterations: "+depth);
+    }
+
+    private static int cost(Node cur, Board end) {
+        if (cur.getParent() == null) return SummationDifferent(cur.getBoard(), end);
+        if (heuristic == 1) return Math.max(cost(cur.getParent(), end), cur.getDepth() + SummationDifferent(cur.getBoard(), end));
+        else return Math.max(cost(cur.getParent(), end), cur.getDepth() + ManhattanDistance(cur.getBoard(), end));
     }
 
     private static int SummationDifferent(Board init, Board end) {
@@ -95,17 +106,6 @@ public class AStar {
         return sum;
     }
 
-    private static int cost(Node init, Node cur, Board end) {
-        if (cur.getParent() == null) return cost(init.getBoard(), end);
-        if (heuristic == 1) return Math.max(cost(init, cur.getParent(), end), cur.getDepth() + SummationDifferent(cur.getBoard(), end));
-        else return Math.max(cost(init, cur.getParent(), end), cur.getDepth() + ManhattanDistance(cur.getBoard(), end));
-    }
-
-    private static int cost(Board init, Board end) {
-        if (heuristic == 1) return SummationDifferent(init, end);
-        else return ManhattanDistance(init, end);
-    }
-
     private static boolean contains(List<Node> list, Node node) {
         for (Node n : list) {
             if (Board.isEquals(n.getBoard(), node.getBoard())) return true;
@@ -113,10 +113,4 @@ public class AStar {
         return false;
     }
 
-    private static boolean contains(PriorityQueue<Node> minHeap, Node node) {
-        for (Node n : minHeap) {
-            if (Board.isEquals(n.getBoard(), node.getBoard())) return true;
-        }
-        return false;
-    }
 }

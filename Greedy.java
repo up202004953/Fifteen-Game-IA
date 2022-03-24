@@ -1,3 +1,5 @@
+package EightGame;
+
 import java.util.*;
 
 public class Greedy {
@@ -23,55 +25,44 @@ public class Greedy {
             Node cur = minHeap.remove();
             visited.add(cur);
 
-            if (cur.getFcost() == 0) return cur;
+            if (cur.getCost() == 0) return cur;
 
-            ArrayList<Node> ListNext = new ArrayList<>();
             if (cur.getBoard().CanMoveUp()) {
                 Node next = new Node(cur.getBoard().moveUp(), cur,cur.getDepth()+1);
                 if (!contains(visited, next)) {
-                    next.setFcost(cost(next, end));
-                    ListNext.add(next);
+                    next.setCost(cost(next, end));
+                    minHeap.add(next);
                 }
             }
             if (cur.getBoard().CanMoveRight()) {
                 Node next = new Node(cur.getBoard().moveRight(), cur,cur.getDepth()+1);
                 if (!contains(visited, next)) {
-                    next.setFcost(cost(next, end));
-                    ListNext.add(next);
+                    next.setCost(cost(next, end));
+                    minHeap.add(next);
                 }
             }
             if (cur.getBoard().CanMoveDown()) {
                 Node next = new Node(cur.getBoard().moveDown(), cur,cur.getDepth()+1);
                 if (!contains(visited, next)) {
-                    next.setFcost(cost(next, end));
-                    ListNext.add(next);
+                    next.setCost(cost(next, end));
+                    minHeap.add(next);
                 }
             }
             if (cur.getBoard().CanMoveLeft()) {
                 Node next = new Node(cur.getBoard().moveLeft(), cur,cur.getDepth()+1);
                 if (!contains(visited, next)) {
-                    next.setFcost(cost(next, end));
-                    ListNext.add(next);
-                }
-            }
-
-            if (ListNext.isEmpty()) continue;
-
-            Collections.sort(ListNext);
-            if (!contains(minHeap, ListNext.get(0))) minHeap.add(ListNext.get(0));
-
-            int min = -1;
-            for (Node node : ListNext) {
-                if (!contains(minHeap, node) && (min == -1 || node.getFcost() == min)) {
-                    min = node.getFcost();
-                    minHeap.add(node);
+                    next.setCost(cost(next, end));
+                    minHeap.add(next);
                 }
             }
         }
     }
 
     private static void GeneralSearchAlgorithm(Board init, Board end) {
-        Node node = GreedyAlgorithm(new Node(init, 0, cost(init, end)), end);
+        Node first = new Node(init, 0);
+        first.setCost(cost(first, end));
+
+        Node node = GreedyAlgorithm(first, end);
 
         int depth = node.getDepth();
         while (node != null) {
@@ -116,21 +107,8 @@ public class Greedy {
         else return ManhattanDistance(cur.getBoard(), end);
     }
 
-    private static int cost(Board cur, Board end) {
-        if (cur == null) return 0;
-        if (heuristic == 1) return SummationDifferent(cur, end);
-        else return ManhattanDistance(cur, end);
-    }
-
     private static boolean contains(List<Node> list, Node node) {
         for (Node n : list) {
-            if (Board.isEquals(n.getBoard(), node.getBoard())) return true;
-        }
-        return false;
-    }
-
-    private static boolean contains(PriorityQueue<Node> minHeap, Node node) {
-        for (Node n : minHeap) {
             if (Board.isEquals(n.getBoard(), node.getBoard())) return true;
         }
         return false;
