@@ -1,3 +1,5 @@
+package EightGame;
+
 import java.util.Scanner;
 
 public class Main {
@@ -28,18 +30,16 @@ public class Main {
         }
 
         //Board Creation
-        Board init = new Board(matrix_init, posX_init, posY_init,4);
-        Board end = new Board(matrix_end, posX_end, posY_end,4);
+        Board init = new Board(matrix_init, posX_init, posY_init,len);
+        Board end = new Board(matrix_end, posX_end, posY_end,len);
 
-        //AStar
-        AStar.search(init, end, stdin);
-        //BFS
-        BFS.search(init, end);
-        //DFS
-        DFS.search(init, end);
-        //IDS
-        IDS.search(init, end);
-        //Greedy
-        Greedy.search(init, end, stdin);
+        System.out.println("A* (1), BFS (2), DFS (3), IDS (4), GREEDY (5)");
+        int n = stdin.nextInt();
+
+        if (n == 1) AStar.search(init, end, stdin);
+        else if (n == 2) BFS.search(init, end);
+        else if (n == 3) DFS.search(init, end);
+        else if (n == 4) IDS.search(init, end);
+        else if (n == 5) Greedy.search(init, end, stdin);
     }
 }
