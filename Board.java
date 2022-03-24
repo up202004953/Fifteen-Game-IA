@@ -1,3 +1,5 @@
+package EightGame;
+
 import java.util.ArrayList;
 
 public class Board {
@@ -19,7 +21,7 @@ public class Board {
 
     public boolean CanMoveLeft() { return posX != 0; }
 
-    public EightGame.Board moveLeft() {
+    public Board moveLeft() {
         int[][] curMatrix = new int[len][len];
         for (int i = 0; i < len; i++)
             for (int j = 0; j < len; j++)
@@ -29,14 +31,14 @@ public class Board {
         curMatrix[posY][posX] = curMatrix[posY][posX-1];
         curMatrix[posY][posX-1] = aux;
 
-        return new EightGame.Board(curMatrix, posX-1, posY, len);
+        return new Board(curMatrix, posX-1, posY, len);
     }
 
     public boolean CanMoveRight() {
         return posX != len - 1;
     }
 
-    public EightGame.Board moveRight() {
+    public Board moveRight() {
         int[][] curMatrix = new int[len][len];
         for (int i = 0; i < len; i++)
             for (int j = 0; j < len; j++)
@@ -46,14 +48,14 @@ public class Board {
         curMatrix[posY][posX] = curMatrix[posY][posX+1];
         curMatrix[posY][posX+1] = aux;
 
-        return new EightGame.Board(curMatrix, posX+1, posY, len);
+        return new Board(curMatrix, posX+1, posY, len);
     }
 
     public boolean CanMoveUp() {
         return posY != 0;
     }
 
-    public EightGame.Board moveUp() {
+    public Board moveUp() {
         int[][] curMatrix = new int[len][len];
         for (int i = 0; i < len; i++)
             for (int j = 0; j < len; j++)
@@ -63,14 +65,14 @@ public class Board {
         curMatrix[posY][posX] = curMatrix[posY-1][posX];
         curMatrix[posY-1][posX] = aux;
 
-        return new EightGame.Board(curMatrix, posX, posY-1, len);
+        return new Board(curMatrix, posX, posY-1, len);
     }
 
     public boolean CanMoveDown() {
         return posY != len-1;
     }
 
-    public EightGame.Board moveDown() {
+    public Board moveDown() {
         int[][] curMatrix = new int[len][len];
         for (int i = 0; i < len; i++)
             for (int j = 0; j < len; j++)
@@ -80,7 +82,7 @@ public class Board {
         curMatrix[posY][posX] = curMatrix[posY+1][posX];
         curMatrix[posY+1][posX] = aux;
 
-        return new EightGame.Board(curMatrix, posX, posY+1, len);
+        return new Board(curMatrix, posX, posY+1, len);
     }
 
     public int inversion() {
@@ -101,7 +103,7 @@ public class Board {
         return sum;
     }
 
-    static boolean isSolution(EightGame.Board init, EightGame.Board end) {
+    static boolean isSolution(Board init, Board end) {
         return ((init.inversion()%2 == 0) == init.isOdd()) == ((end.inversion()%2 == 0) == end.isOdd());
     }
 
@@ -118,16 +120,16 @@ public class Board {
         StringBuilder bfr = new StringBuilder("");
 
         for (int i = 0; i < len; i++) {
-            for (int j = 0; j < len; j++) {
-                bfr.append(" ").append(matrix[i][j]);
-            }
-            bfr.append("\n");
+           for (int j = 0; j < len; j++) {
+               bfr.append(" ").append(matrix[i][j]);
+           }
+           bfr.append("\n");
         }
 
         return bfr.toString();
     }
 
-    public static Boolean isEquals(EightGame.Board a, EightGame.Board b) {
+    public static Boolean isEquals(Board a, Board b) {
         if (a.getLen() != b.getLen()) return false;
 
         for (int i = 0; i < a.getLen(); i++)

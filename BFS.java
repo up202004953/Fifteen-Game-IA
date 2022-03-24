@@ -1,10 +1,6 @@
-import EightGame.Board;
-import EightGame.Node;
+package EightGame;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class BFS {
     public static void search(Board init, Board end) {

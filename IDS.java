@@ -1,8 +1,12 @@
+package EightGame;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 public class IDS {
+
     public static void search(Board init, Board end) {
         System.out.println("IDS");
         if (Board.isSolution(init, end)) GeneralSearchAlgorithm(init, end);
